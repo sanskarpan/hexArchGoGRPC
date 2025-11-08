@@ -378,3 +378,8 @@ docker-compose down -v  # Remove volumes
 docker-compose up -d     # Recreate with new schema
 ```
 
+## Acknowledgments
+
+- **Alistair Cockburn** for defining hexagonal architecture
+- **Go gRPC team** for the excellent gRPC implementation
+- **Squirrel SQL** for the query builder library

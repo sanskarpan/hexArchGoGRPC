@@ -4,15 +4,11 @@ import (
 	"context"
 	"log"
 	"net"
-	"os"
 	"testing"
 
 	// application
 	"hex/internal/application/api"
 	"hex/internal/application/core/arithmetic"
-
-	// adapters
-	"hex/internal/adapters/framework/right/db"
 
 	"hex/internal/adapters/framework/left/grpc/pb"
 
@@ -25,18 +21,17 @@ const bufSize = 1024 * 1024
 
 var lis *bufconn.Listener
 
+type stubDbAdapter struct{}
+
+func (stubDbAdapter) CloseDbConnection() {}
+
+func (stubDbAdapter) AddToHistory(answer int32, operation string) error {
+	return nil
+}
+
 func init() {
-	var err error
 	lis = bufconn.Listen(bufSize)
 	grpcServer := grpc.NewServer()
-
-	dbaseDriver := os.Getenv("DB_DRIVER")
-	dsourceName := os.Getenv("DS_NAME")
-
-	dbAdapter, err := db.NewAdapter(dbaseDriver, dsourceName)
-	if err != nil {
-		log.Fatalf("failed to initiate dbase connection: %v", err)
-	}
 
 	// core
 	core := arithmetic.New()
@@ -46,7 +41,7 @@ func init() {
 	// Therefore the type for the dbAdapter parameter
 	// that is to be injected into the NewApplication will
 	// be of type DbPort
-	applicationAPI := api.NewApplication(dbAdapter, core)
+	applicationAPI := api.NewApplication(stubDbAdapter{}, core)
 
 	// NOTE: We use dependency injection to give the grpc
 	// adapter access to the application, therefore

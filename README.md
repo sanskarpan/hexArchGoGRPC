@@ -43,7 +43,7 @@ The project follows hexagonal architecture principles:
                       ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │                   Application Layer (API)                       │
-│  - Orchestrates operations between core and adapters            │
+│  - Orchestrates operations between core and adapters               │
 │  - Implements use cases                                         │
 │  - Dependency injection                                         │
 └─────────────────────┬───────────────────────────────────────────┘
